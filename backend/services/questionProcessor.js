@@ -37,7 +37,9 @@ async function processQuestions(questions, jobId, io) {
         results.push(result);
         jobStore.updateJob(jobId, { results });
 
-        io.to(jobId).emit('result', result);
+          if (io) {
+          io.to(jobId).emit('result', result);
+        }
 
         if (i < questions.length - 1) {
           const delay = randomDelay(2000, 5000);
@@ -58,7 +60,9 @@ async function processQuestions(questions, jobId, io) {
         results.push(result);
         jobStore.updateJob(jobId, { results });
 
-        io.to(jobId).emit('result', result);
+        if (io) {
+          io.to(jobId).emit('result', result);
+        }
       }
     }
 
