@@ -1,0 +1,115 @@
+.progress-dashboard {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.progress-dashboard h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.status-info {
+  margin-bottom: 1.5rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.status-badge-queued {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge-processing {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge-failed {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.current-question {
+  padding: 1rem;
+  background: #f5f5ff;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1rem;
+}
+
+.progress-bar-container {
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 30px;
+  background: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+  border-radius: 15px;
+}
+
+.progress-text {
+  text-align: center;
+  color: #666;
+  font-weight: 500;
+}
+
+.processing-note {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fff3cd;
+  border-radius: 8px;
+  color: #856404;
+  text-align: center;
+  font-weight: 500;
+}
+
+.completion-actions {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.download-button-main {
+  padding: 1rem 2rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.download-button-main:hover {
+  background: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+

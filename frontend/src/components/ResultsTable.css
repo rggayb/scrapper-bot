@@ -1,0 +1,172 @@
+.results-table {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.results-header h2 {
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.results-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.download-button,
+.reset-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.download-button {
+  background: #28a745;
+  color: white;
+}
+
+.download-button:hover {
+  background: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.reset-button {
+  background: #667eea;
+  color: white;
+}
+
+.reset-button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f8f9fa;
+}
+
+th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #dee2e6;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.result-row:hover {
+  background: #f8f9fa;
+}
+
+.result-row-success {
+  background: #f8fff9;
+}
+
+.result-row-failed {
+  background: #fff8f8;
+}
+
+.question-cell {
+  font-weight: 500;
+  color: #333;
+  max-width: 300px;
+}
+
+.answer-cell {
+  max-width: 500px;
+}
+
+.answer-content {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.answer-content pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  margin: 0;
+}
+
+.no-answer {
+  color: #999;
+  font-style: italic;
+}
+
+.completion-message {
+  padding: 1rem;
+  background: #d4edda;
+  border-radius: 8px;
+  color: #155724;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.no-results-message {
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  color: #666;
+  margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .results-actions {
+    width: 100%;
+  }
+
+  .download-button,
+  .reset-button {
+    flex: 1;
+  }
+
+  .table-container {
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 0.5rem;
+  }
+}
+
