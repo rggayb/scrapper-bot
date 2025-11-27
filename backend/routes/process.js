@@ -101,7 +101,9 @@ async function handleRequest(req, res) {
       createdAt: new Date().toISOString()
     });
 
-    const io = req.app.get('io');
+    // For Vercel serverless, Socket.IO tidak tersedia
+    // Frontend akan pakai polling backup
+    const io = req.app.get ? req.app.get('io') : null;
 
     processQuestions(questions, jobId, io)
       .catch(error => {

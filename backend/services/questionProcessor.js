@@ -9,11 +9,13 @@ async function processQuestions(questions, jobId, io) {
     for (let i = 0; i < questions.length; i++) {
       const question = questions[i];
       
-      io.to(jobId).emit('progress', {
-        question,
-        total: questions.length,
-        current: i + 1
-      });
+      if (io) {
+        io.to(jobId).emit('progress', {
+          question,
+          total: questions.length,
+          current: i + 1
+        });
+      }
 
       jobStore.updateJob(jobId, {
         current: i + 1,
@@ -66,12 +68,14 @@ async function processQuestions(questions, jobId, io) {
       current: questions.length
     });
 
-    io.to(jobId).emit('complete', {
-      status: 'completed',
-      total: questions.length,
-      current: questions.length,
-      results: finalJob.results || []
-    });
+    if (io) {
+      io.to(jobId).emit('complete', {
+        status: 'completed',
+        total: questions.length,
+        current: questions.length,
+        results: finalJob.results || []
+      });
+    }
 
   } catch (error) {
     console.error(`Job ${jobId} processing error:`, error);
@@ -79,7 +83,9 @@ async function processQuestions(questions, jobId, io) {
       status: 'failed',
       error: error.message
     });
-    io.to(jobId).emit('error', { message: error.message });
+    if (io) {
+      io.to(jobId).emit('error', { message: error.message });
+    }
     throw error;
   }
 }
