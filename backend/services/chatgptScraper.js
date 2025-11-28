@@ -35,18 +35,70 @@ async function processSingleQuestion(question) {
 
     await page.goto('https://chat.openai.com', { waitUntil: 'networkidle2', timeout: 30000 });
 
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
 
-    const textareaSelector = 'textarea[data-id="root"]';
-    await page.waitForSelector(textareaSelector, { timeout: 10000 });
+    // Try multiple selectors for ChatGPT textarea (they change frequently)
+    const textareaSelectors = [
+      'textarea[data-id="root"]',
+      '#prompt-textarea',
+      'textarea[placeholder*="Message"]',
+      'textarea[placeholder*="message"]',
+      'textarea[id*="prompt"]',
+      'textarea[aria-label*="Message"]',
+      'textarea'
+    ];
+
+    let textareaSelector = null;
+    for (const selector of textareaSelectors) {
+      try {
+        await page.waitForSelector(selector, { timeout: 3000 });
+        textareaSelector = selector;
+        console.log(`Found textarea with selector: ${selector}`);
+        break;
+      } catch (e) {
+        // Try next selector
+        continue;
+      }
+    }
+
+    if (!textareaSelector) {
+      throw new Error('Could not find ChatGPT textarea. The page structure may have changed.');
+    }
     
+    // Clear any existing text and type question
+    await page.click(textareaSelector);
+    await page.evaluate((sel) => {
+      const el = document.querySelector(sel);
+      if (el) el.value = '';
+    }, textareaSelector);
     await page.type(textareaSelector, question, { delay: 50 });
     await page.waitForTimeout(500);
     
-    const sendButton = await page.$('button[data-testid="send-button"]');
-    if (sendButton) {
-      await sendButton.click();
-    } else {
+    // Try multiple ways to submit
+    const sendButtonSelectors = [
+      'button[data-testid="send-button"]',
+      'button[aria-label*="Send"]',
+      'button[aria-label*="send"]',
+      'button:has-text("Send")',
+      'button[type="submit"]'
+    ];
+
+    let sent = false;
+    for (const btnSelector of sendButtonSelectors) {
+      try {
+        const sendButton = await page.$(btnSelector);
+        if (sendButton) {
+          await sendButton.click();
+          sent = true;
+          break;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+
+    if (!sent) {
+      // Fallback: press Enter
       await page.keyboard.press('Enter');
     }
 
