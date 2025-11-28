@@ -104,18 +104,62 @@ async function processSingleQuestion(question) {
 
     await page.waitForTimeout(3000);
 
-    const responseSelector = '[data-message-author-role="assistant"]';
-    await page.waitForSelector(responseSelector, { timeout: 60000 });
+    // Try multiple selectors for ChatGPT response
+    const responseSelectors = [
+      '[data-message-author-role="assistant"]',
+      '[data-message-role="assistant"]',
+      'div[class*="message"]',
+      'div[class*="AssistantMessage"]',
+      'div[class*="markdown"]',
+      'div[class*="prose"]'
+    ];
 
-    await page.waitForTimeout(2000);
+    let responseElement = null;
+    const maxWaitTime = 60000; // 60 seconds max
+    const startTime = Date.now();
 
-    const responseElements = await page.$$(responseSelector);
-    if (responseElements.length === 0) {
-      throw new Error('No response found');
+    while (!responseElement && (Date.now() - startTime) < maxWaitTime) {
+      for (const selector of responseSelectors) {
+        try {
+          const elements = await page.$$(selector);
+          if (elements.length > 0) {
+            // Get the last (most recent) response
+            const lastEl = elements[elements.length - 1];
+            const text = await lastEl.evaluate(el => {
+              // Try to get text content, excluding buttons and other UI elements
+              const clone = el.cloneNode(true);
+              const buttons = clone.querySelectorAll('button, svg, [class*="button"]');
+              buttons.forEach(btn => btn.remove());
+              return clone.textContent || clone.innerText || '';
+            });
+            
+            if (text && text.trim().length > 10) { // At least 10 characters to be valid
+              responseElement = lastEl;
+              console.log(`Found response with selector: ${selector}`);
+              break;
+            }
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+
+      if (!responseElement) {
+        await page.waitForTimeout(2000);
+      }
     }
 
-    const lastResponse = responseElements[responseElements.length - 1];
-    const answer = await lastResponse.evaluate(el => el.textContent || el.innerText);
+    if (!responseElement) {
+      throw new Error('No response found from ChatGPT after waiting 60 seconds');
+    }
+
+    const answer = await responseElement.evaluate(el => {
+      // Clean up the text by removing UI elements
+      const clone = el.cloneNode(true);
+      const buttons = clone.querySelectorAll('button, svg, [class*="button"], [class*="icon"]');
+      buttons.forEach(btn => btn.remove());
+      return (clone.textContent || clone.innerText || '').trim();
+    });
 
     await browser.close();
     browser = null;
